@@ -309,14 +309,17 @@
 
   <!-- INTRO -->
   <div id="intro">
-    <iframe
-      src="https://www.youtube.com/embed/aRGjxAXNY_A?autoplay=1&muted=1&controls=0&loop=1&playlist=aRGjxAXNY_A&showinfo=0&rel=0&modestbranding=1"
-      frameborder="0"
-      scrolling="no"
-      allowfullscreen
-      allow="autoplay; fullscreen"
-      style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-    ></iframe>
+    <video
+      id="intro-video"
+      autoplay
+      muted
+      playsinline
+      webkit-playsinline
+      preload="auto"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:none;"
+    >
+      <source src="enter.mp4" type="video/mp4" />
+    </video>
     <button id="intro-skip">Skip ›</button>
   </div>
 
@@ -435,6 +438,7 @@
     const intro   = document.getElementById('intro');
     const main    = document.getElementById('main');
     const skipBtn = document.getElementById('intro-skip');
+    const video   = document.getElementById('intro-video');
 
     function showMain() {
       if (intro.classList.contains('hidden')) return;
@@ -444,14 +448,8 @@
     }
 
     skipBtn.addEventListener('click', showMain);
-
-    window.addEventListener('message', function(e) {
-      try {
-        const d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        if (d && (d.event === 'ended' || d === 'ended')) showMain();
-      } catch(err) {}
-    });
-
+    video.addEventListener('ended', showMain);
+    video.addEventListener('error', () => setTimeout(showMain, 1000));
     setTimeout(showMain, 30000);
   </script>
 
